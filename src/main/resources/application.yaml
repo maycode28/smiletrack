@@ -1,3 +1,11 @@
+server:
+  port: 8080
 spring:
-  application:
-    name: smiletrack
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://127.0.0.1:3306/Spring_26_01?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+mybatis:
+  type-aliases-package: com.example.demo.vo
+  mapper-locations: classpath:/mappers/**/*.xml
