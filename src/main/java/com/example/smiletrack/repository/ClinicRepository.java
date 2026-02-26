@@ -1,9 +1,7 @@
 package com.example.smiletrack.repository;
 
-import com.example.smiletrack.vo.Clinic;
-import org.apache.ibatis.annotations.Mapper;
+import com.example.smiletrack.entity.Clinic;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Mapper
-public interface ClinicRepository {
-    void insertClinic(Clinic clinic);
+public interface ClinicRepository extends JpaRepository<Clinic, Integer> {
 }

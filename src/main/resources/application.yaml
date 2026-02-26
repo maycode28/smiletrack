@@ -6,6 +6,12 @@ spring:
     url: jdbc:mariadb://127.0.0.1:3306/smileTrack?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
     username: root
     password: 1234
-mybatis:
-  type-aliases-package: com.example.demo.vo
-  mapper-locations: classpath:/mappers/**/*.xml
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        globally_quoted_identifiers: true
+    database-platform: org.hibernate.dialect.MariaDBDialect

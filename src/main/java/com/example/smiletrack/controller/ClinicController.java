@@ -1,7 +1,7 @@
 package com.example.smiletrack.controller;
 
 import com.example.smiletrack.repository.ClinicRepository;
-import com.example.smiletrack.vo.Clinic;
+import com.example.smiletrack.entity.Clinic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +16,7 @@ public class ClinicController {
 
     @PostMapping
     public ResponseEntity<String> createClinic(@RequestBody Clinic clinic) {
-        clinicRepository.insertClinic(clinic);
+        clinicRepository.save(clinic);
         return ResponseEntity.ok("등록 완료");
     }
 }
