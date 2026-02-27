@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "CLINIC")
@@ -38,4 +40,15 @@ public class Clinic {
 
     @Column(name = "assigned_account_manager_id")
     private Integer accountManagerId;
+
+    @Column(name = "is_active")
+    private Boolean active = true;
+
+    @Column(name ="created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

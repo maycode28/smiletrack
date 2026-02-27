@@ -28,9 +28,11 @@ public class Doctor {
     private String preferences;
 
 
-    @Column(name="is_active")
-    private Boolean isActive = true;
-
-    @Column(name="created_at")
+    @Column(name ="created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

@@ -36,8 +36,24 @@ public class Employee {
     @Column(name="is_active")
     private Boolean isActive = true;
 
-    @Column(name="created_at")
+    @Column(name="is_on_duty")
+    private Boolean isOnDuty = false;
+
+    @Column(name ="created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(name ="updated_at")
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
     public enum Role {
         TECHNICIAN, MANAGER

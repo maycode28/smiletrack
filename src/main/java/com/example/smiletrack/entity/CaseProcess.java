@@ -51,6 +51,17 @@ public class CaseProcess {
     @Column(name ="updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
     public enum Status {
         PENDING, ASSIGNED, IN_PROGRESS, COMPLETED, SKIPPED
     }
