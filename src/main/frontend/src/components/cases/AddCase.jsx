@@ -357,13 +357,14 @@ export default function AddCase() {
                                             <input
                                                 className="border border-[#137fec] rounded-lg px-3 py-2 text-sm outline-none"
                                                 placeholder="Search process..."
-                                                onChange={(e) => {/* 검색 필터 */
-                                                }}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
                                                 autoFocus
                                             />
                                             <div
                                                 className="absolute top-full left-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl z-20 w-48">
-                                                {availableProcesses.map((p) => (
+                                                {availableProcesses.filter(p =>
+                                                    p.name.toLowerCase().includes(searchQuery.toLowerCase())
+                                                ).map((p) => (
                                                     <div
                                                         key={p.id}
                                                         className="px-4 py-2 text-sm hover:bg-slate-50 cursor-pointer"
