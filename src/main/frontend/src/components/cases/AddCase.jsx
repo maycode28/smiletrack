@@ -1,4 +1,4 @@
-import {useState} from "react";
+import { useState, useEffect } from "react";
 import Header from "../common/Header";
 import axios from "axios";
 import SearchableSelect from "../common/SearchableSelect";
@@ -17,32 +17,34 @@ export default function AddCase() {
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [openDoctors, setOpenDoctors] = useState(false);
 
-    // DB에서 불러올 process 목록 (임시 더미)
-    const availableProcesses = [
-        {id: 4, name: "Glazing"},
-        {id: 5, name: "Polish"},
-        {id: 6, name: "Sintering"},
-        {id: 7, name: "QC Check"},
-    ];
+    // // DB에서 불러올 process 목록 (임시 더미)
+    // const availableProcesses = [
+    //     {id: 4, name: "Glazing"},
+    //     {id: 5, name: "Polish"},
+    //     {id: 6, name: "Sintering"},
+    //     {id: 7, name: "QC Check"},
+    // ];
+    //
+    // //DB에서 불러올 doctor 목록 (더미)
+    // const doctors = [
+    //     { id: 1, name: 'Dr. Sarah Miller', clinic: 'Riverside Dental Center' },
+    //     { id: 2, name: 'Dr. James Wilson', clinic: 'City Orthodontics' },
+    // ];
 
-    //DB에서 불러올 doctor 목록 (더미)
-    const doctors = [
-        { id: 1, name: 'Dr. Sarah Miller', clinic: 'Riverside Dental Center' },
-        { id: 2, name: 'Dr. James Wilson', clinic: 'City Orthodontics' },
-    ];
 
-    const [formData, setFormData] = useState({
-        panNumber: "",
-        patientName: "",
-        doctorClinic: "",
-        category: "Fixed Prosthodontics",
-        product: "Zirconia Crown",
-        shade: "N/A",
-        material: "Multi-layered Zirconia",
-        dueDate: "",
-        priority: "Normal",
-        notes: "",
-    });
+    const [doctors, setDoctors] = useState([]);
+    const [availableProcesses, setAvailableProcesses] = useState([]);
+
+    useEffect(() => {
+        axios.get("/api/doctors").then(res => {
+            setDoctors(res.data);
+        });
+
+        axios.get("/api/processes").then(res => {
+            setAvailableProcesses(res.data);
+        });
+    }, []);
+
 
     // 폼 필드 변경
     const handleChange = (e) => {
@@ -112,20 +114,48 @@ export default function AddCase() {
         setSteps((prev) => prev.filter((s) => s.id !== id));
     };
 
+    const [formData, setFormData] = useState({
+        caseNumber: "",
+        panNumber: "",
+        patientName: "",
+        category: "Fixed Prosthodontics",
+        product: "Zirconia Crown",
+        shade: "N/A",
+        material: "Multi-layered Zirconia",
+        dueDate: "",
+        priority: "Normal",
+        notes: "",
+    });
 
     // 서버 전송
-    const handleSubmit = () => {
-        const submitData = {
-            ...formData,
-            doctor: selectedDoctor,
-            teeth: selectedTeeth.join(","),
-            steps: steps
-                .filter((s) => s.processId !== null)
-                .map((s) => ({processId: s.processId, sequenceOrder: s.order})),
-        };
-        axios.post("/api/cases", submitData);
-    };
+    const handleSubmit = async () => {
+        const payload = {
+            caseNumber: formData.caseNumber,
+            panNumber: formData.panNumber,
+            patientName: formData.patientName,
 
+            doctorId: selectedDoctor?.id,   // 🔑 핵심
+            teeth: selectedTeeth.join(","),          // 배열 그대로 보내도 됨
+
+            category: formData.category,
+            product: formData.product,
+            shade: formData.shade,
+            material: formData.material,
+
+            dueDate: formData.dueDate,
+            priority: formData.priority,
+            notes: formData.notes,
+
+            processes: steps
+                .filter(s => s.processId !== null)
+                .map((s) => ({
+                    processId: s.processId,
+                    sequenceOrder: s.order
+                }))
+        };
+
+        await axios.post("/api/cases", payload);
+    };
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-8 pb-32">
@@ -193,7 +223,7 @@ export default function AddCase() {
                                     renderItem={(item) => (
                                         <div className="px-3 py-2 hover:bg-slate-50 cursor-pointer">
                                             <p className="text-sm font-medium">{item.name}</p>
-                                            <p className="text-xs text-slate-500">{item.clinic}</p>
+                                            <p className="text-xs text-slate-500">{item.clinicName}</p>
                                         </div>
                                     )}
                                 />
