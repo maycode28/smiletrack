@@ -1,6 +1,7 @@
 import {useState} from "react";
 import Header from "../common/Header";
 import axios from "axios";
+import SearchableSelect from "../common/SearchableSelect";
 
 export default function AddCase() {
     const [selectedTeeth, setSelectedTeeth] = useState([]);
@@ -11,6 +12,11 @@ export default function AddCase() {
         {id: 3, processId: 3, name: "Mill", order: 3},
     ]);
 
+    const [openSelectId, setOpenSelectId] = useState(null);
+
+    const [selectedDoctor, setSelectedDoctor] = useState(null);
+    const [openDoctors, setOpenDoctors] = useState(false);
+
     // DB에서 불러올 process 목록 (임시 더미)
     const availableProcesses = [
         {id: 4, name: "Glazing"},
@@ -19,7 +25,11 @@ export default function AddCase() {
         {id: 7, name: "QC Check"},
     ];
 
-    const [searchQuery, setSearchQuery] = useState("");
+    //DB에서 불러올 doctor 목록 (더미)
+    const doctors = [
+        { id: 1, name: 'Dr. Sarah Miller', clinic: 'Riverside Dental Center' },
+        { id: 2, name: 'Dr. James Wilson', clinic: 'City Orthodontics' },
+    ];
 
     const [formData, setFormData] = useState({
         panNumber: "",
@@ -77,36 +87,37 @@ export default function AddCase() {
         const updated = steps.map((s) =>
             s.order >= newOrder ? {...s, order: s.order + 1} : s
         );
-        const newStep = {id: Date.now(), processId: null, name: null, order: newOrder};
+        const newStep = {id: Date.now(), processId: null, name: null, order: newOrder, isTemp: true};
         updated.splice(index + 1, 0, newStep);
         setSteps(updated);
-        setSearchQuery("");
+        setOpenSelectId(newStep.id);
     };
 
     const addStepAtEnd = () => {
         const maxOrder = steps.length > 0 ? Math.max(...steps.map((s) => s.order)) : 0;
-        const newStep = {id: Date.now(), processId: null, name: null, order: maxOrder + 1};
+        const newStep = {id: Date.now(), processId: null, name: null, order: maxOrder + 1, isTemp: true};
         setSteps((prev) => [...prev, newStep]);
-        setSearchQuery("");
+        setOpenSelectId(newStep.id);
     };
 
     const selectProcess = (stepId, process) => {
         setSteps((prev) =>
             prev.map((s) =>
-                s.id === stepId ? {...s, name: process.name, processId: process.id} : s
+                s.id === stepId ? {...s, name: process.name, processId: process.id, isTemp: false} : s
             )
         );
-        setSearchQuery("");
     };
 
     const removeStep = (id) => {
         setSteps((prev) => prev.filter((s) => s.id !== id));
     };
 
+
     // 서버 전송
     const handleSubmit = () => {
         const submitData = {
             ...formData,
+            doctor: selectedDoctor,
             teeth: selectedTeeth.join(","),
             steps: steps
                 .filter((s) => s.processId !== null)
@@ -115,9 +126,6 @@ export default function AddCase() {
         axios.post("/api/cases", submitData);
     };
 
-    const filteredProcesses = availableProcesses.filter((p) =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-8 pb-32">
@@ -169,25 +177,29 @@ export default function AddCase() {
                                 Doctor / Clinic <span className="text-red-500">*</span>
                             </label>
                             <div className="relative group">
-                                <input
-                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] pr-10 text-sm px-3 py-2 outline-none"
-                                    placeholder="Search doctor by name or clinic ID..."
-                                    type="text"
+                                <SearchableSelect
+                                    items={doctors}
+                                    labelKey="name"
+                                    valueKey="id"
+                                    placeholder="Search doctor..."
+                                    display={true}
+                                    open={openDoctors}
+                                    onSelect={(item) => {
+                                        setSelectedDoctor(item);
+                                        setOpenDoctors(false);
+                                    }}
+                                    onOpen={() => setOpenDoctors(true)}
+                                    onClose={() => setOpenDoctors(false)}
+                                    renderItem={(item) => (
+                                        <div className="px-3 py-2 hover:bg-slate-50 cursor-pointer">
+                                            <p className="text-sm font-medium">{item.name}</p>
+                                            <p className="text-xs text-slate-500">{item.clinic}</p>
+                                        </div>
+                                    )}
                                 />
                                 <span
                                     className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
-                                <div
-                                    className="hidden group-focus-within:block absolute top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl z-20 max-h-48 overflow-y-auto">
-                                    <div
-                                        className="px-4 py-2 hover:bg-slate-50 cursor-pointer border-b border-slate-100">
-                                        <p className="text-sm font-medium">Dr. Sarah Miller</p>
-                                        <p className="text-xs text-slate-500">Riverside Dental Center</p>
-                                    </div>
-                                    <div className="px-4 py-2 hover:bg-slate-50 cursor-pointer">
-                                        <p className="text-sm font-medium">Dr. James Wilson</p>
-                                        <p className="text-xs text-slate-500">City Orthodontics</p>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -351,30 +363,30 @@ export default function AddCase() {
                         <div className="flex flex-wrap items-center gap-3">
                             {steps.map((step, i) => (
                                 <div key={step.id} className="flex items-center gap-3">
-                                    {step.name === null ? (
+                                    {openSelectId === step.id ? (
                                         // 드롭다운
-                                        <div className="relative">
-                                            <input
-                                                className="border border-[#137fec] rounded-lg px-3 py-2 text-sm outline-none"
-                                                placeholder="Search process..."
-                                                onChange={(e) => setSearchQuery(e.target.value)}
-                                                autoFocus
-                                            />
-                                            <div
-                                                className="absolute top-full left-0 mt-1 bg-white border border-slate-200 rounded-lg shadow-xl z-20 w-48">
-                                                {availableProcesses.filter(p =>
-                                                    p.name.toLowerCase().includes(searchQuery.toLowerCase())
-                                                ).map((p) => (
-                                                    <div
-                                                        key={p.id}
-                                                        className="px-4 py-2 text-sm hover:bg-slate-50 cursor-pointer"
-                                                        onClick={() => selectProcess(step.id, p)}
-                                                    >
-                                                        {p.name}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
+                                        <SearchableSelect
+                                            items={availableProcesses}
+                                            labelKey="name"
+                                            valueKey="id"
+                                            placeholder="Search process..."
+                                            display={true}
+                                            onClose={() => {
+                                                setSteps((prev) => prev.filter(
+                                                    (s) => !(s.id === step.id && s.isTemp)
+                                                ));
+                                                setOpenSelectId(null);
+                                            }}
+                                            onSelect={(item) => {
+                                                selectProcess(step.id, item);
+                                                setOpenSelectId(null);
+                                            }}
+                                            renderItem={(item) => (
+                                                <div className="px-3 py-2 text-sm hover:bg-slate-50 cursor-pointer">
+                                                    {item.name}
+                                                </div>
+                                            )}
+                                        />
                                     ) : (
                                         <div
                                             className="bg-white border border-slate-200 px-4 py-2 rounded-lg shadow-sm flex items-center space-x-2">
@@ -389,7 +401,9 @@ export default function AddCase() {
                                     {/* 스텝 사이 + 버튼 */}
                                     {i < steps.length - 1 && (
                                         <button
-                                            onClick={() => addStepBetween(i)}
+                                            onClick={() => {
+                                                addStepBetween(i)
+                                            }}
                                             className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-[#137fec]/10 hover:border-[#137fec] text-slate-400 hover:text-[#137fec] transition-all"
                                             type="button"
                                         >
