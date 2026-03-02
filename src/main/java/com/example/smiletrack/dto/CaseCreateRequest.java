@@ -16,10 +16,10 @@ public class CaseCreateRequest {
     private String panNumber;
     private String patientName;
 
-    private Long doctorId;
+    private Integer doctorId;
     private String teeth;
 
-    private Long productId;
+    private Integer productId;
     private String shade;
     private String material;
 

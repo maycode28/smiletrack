@@ -14,8 +14,8 @@ public class CaseController {
     private CaseService caseService;
 
     @PostMapping
-    public ResponseEntity<String> createCase(@RequestBody CaseCreateRequest dto) {
-        System.out.println(dto);
+    public ResponseEntity<String> createCase(@RequestBody CaseCreateRequest request) {
+        caseService.createCase(request);
         return ResponseEntity.ok("등록 완료");
     }
 }

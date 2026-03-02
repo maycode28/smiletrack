@@ -6,11 +6,7 @@ import SearchableSelect from "../common/SearchableSelect";
 export default function AddCase() {
     const [selectedTeeth, setSelectedTeeth] = useState([]);
 
-    const [steps, setSteps] = useState([
-        // {id: 1, processId: 1, name: "Scan", order: 1},
-        // {id: 2, processId: 2, name: "Design", order: 2},
-        // {id: 3, processId: 3, name: "Mill", order: 3},
-    ]);
+    const [steps, setSteps] = useState([]);
 
     const [openSelectId, setOpenSelectId] = useState(null);
 
@@ -196,7 +192,6 @@ export default function AddCase() {
     return (
         <div className="max-w-5xl mx-auto px-4 py-8 pb-32">
             <Header/>
-            {/* 브레드크럼 */}
             <div className="mb-8 mt-8">
                 <div className="flex items-center justify-between">
                     <h1 className="text-3xl font-bold tracking-tight">Advanced New Case</h1>

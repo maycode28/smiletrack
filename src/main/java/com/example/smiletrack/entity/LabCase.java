@@ -1,13 +1,18 @@
 package com.example.smiletrack.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "`CASE`")
-public class Case {
+public class LabCase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,9 +21,6 @@ public class Case {
 
     @Column(name = "case_number", nullable = false, length = 50)
     private String caseNumber;
-
-    @Column(name = "patient_name", nullable = false, length = 50)
-    private String patientName;
 
     /* ======================
        FK 관계
@@ -43,6 +45,8 @@ public class Case {
     /* ======================
        도메인 필드
        ====================== */
+    @Column(name = "patient_name", nullable = false, length = 50)
+    private String patientName;
 
     @Column(name = "due_date", nullable = false)
     private LocalDate dueDate;
@@ -67,12 +71,14 @@ public class Case {
     @Column(name = "priority")
     private Priority priority = Priority.NORMAL;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(name = "current_status")
     private CaseStatus currentStatus = CaseStatus.FLOATING;
 
+    @Builder.Default
     @Column(name = "is_active")
-    private Boolean active = true;
+    private boolean active = true;
 
     /* ======================
        Timestamp

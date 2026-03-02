@@ -1,14 +1,21 @@
 package com.example.smiletrack.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
+@Getter
+@Builder
 @Entity
 @Table(name = "CASE_PROCESS")
-public class CaseProcess {
+@NoArgsConstructor
+@AllArgsConstructor
+public class LabCaseProcess {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +24,7 @@ public class CaseProcess {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "case_id", nullable = false)
-    private Case caseEntity;
+    private LabCase labCase;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "process_id", nullable = false)
@@ -40,6 +47,7 @@ public class CaseProcess {
     @Column(name ="actual_end")
     private LocalDateTime actualEnd;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     private Status status = Status.PENDING;
 
