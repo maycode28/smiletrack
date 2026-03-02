@@ -5,9 +5,29 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [remember, setRemember] = useState(false);
 
-    const handleSubmit = (e) => {
+    const [errorMsg, setErrorMsg] = useState("");
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle login logic here
+
+        try {
+            const res = await fetch("/api/employee/doLogin", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ loginId: username, loginPw: password }),
+            });
+
+            const data = await res.json();
+
+            if (data.resultCode === "S-1") {
+                alert(data.msg);
+                window.location.href = "/dashboard";
+            } else {
+                setErrorMsg(data.msg);
+            }
+        } catch (err) {
+            alert("서버 연결 실패");
+        }
     };
 
     return (
@@ -133,6 +153,9 @@ export default function Login() {
                         </div>
 
                         {/* Sign In Button */}
+                        {errorMsg && (
+                            <p className="text-sm text-red-500">{errorMsg}</p>
+                        )}
                         <button
                             type="submit"
                             className="w-full relative flex items-center justify-center rounded-2xl py-4 text-base font-bold text-white transition-opacity hover:opacity-90 active:opacity-80"

@@ -1,9 +1,11 @@
 package com.example.smiletrack.entity;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@Getter
 @Entity
 @Table(name = "EMPLOYEE")
 public class Employee {
@@ -15,6 +17,12 @@ public class Employee {
 
     @Column(name="employee_name", nullable = false, length = 100)
     private String employeeName;
+
+    @Column(name="login_id", nullable = false, length = 100)
+    private String loginId;
+
+    @Column(name="login_pw", nullable = false, length = 100)
+    private String loginPw;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")

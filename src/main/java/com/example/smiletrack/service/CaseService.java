@@ -5,6 +5,7 @@ import com.example.smiletrack.dto.ProcessStep;
 import com.example.smiletrack.entity.*;
 import com.example.smiletrack.entity.Process;
 import com.example.smiletrack.repository.*;
+import com.example.smiletrack.util.Rq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -126,7 +127,7 @@ public class CaseService {
         return current;
     }
 
-    public void createCase(CaseCreateRequest req) {
+    public void createCase(CaseCreateRequest req, Rq rq) {
 
         // 참조 엔티티 조회
         Doctor doctor = doctorRepository.findById(req.getDoctorId())
@@ -150,6 +151,8 @@ public class CaseService {
                 .productType(productType)
                 .toothNumbers(req.getTeeth())
                 .archType(determineArchType(req.getTeeth()))
+                .currentHolder(rq.getLoggedInEmployee())
+                .currentLocation(rq.getLoggedInEmployee().getDefaultLocation())
                 .build();
 
         labCaseRepository.save(labCase);
