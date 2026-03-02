@@ -7,9 +7,9 @@ export default function AddCase() {
     const [selectedTeeth, setSelectedTeeth] = useState([]);
 
     const [steps, setSteps] = useState([
-        {id: 1, processId: 1, name: "Scan", order: 1},
-        {id: 2, processId: 2, name: "Design", order: 2},
-        {id: 3, processId: 3, name: "Mill", order: 3},
+        // {id: 1, processId: 1, name: "Scan", order: 1},
+        // {id: 2, processId: 2, name: "Design", order: 2},
+        // {id: 3, processId: 3, name: "Mill", order: 3},
     ]);
 
     const [openSelectId, setOpenSelectId] = useState(null);
@@ -436,6 +436,16 @@ export default function AddCase() {
                                             setSelectedCategory(matchedCategory);
                                         }
                                         setOpenProducts(false);
+                                        axios.get(`/api/products/${item.id}/workflow`)
+                                            .then(res => {
+                                                const workflowSteps = res.data.map(w => ({
+                                                    id: crypto.randomUUID(),
+                                                    processId: w.processId,
+                                                    name: w.name,
+                                                    order: w.order
+                                                }));
+                                                setSteps(workflowSteps);
+                                            });
                                     }}
                                     onOpen={() => setOpenProducts(true)}
                                     onClose={() => setOpenProducts(false)}

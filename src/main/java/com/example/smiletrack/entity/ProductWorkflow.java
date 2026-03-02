@@ -1,8 +1,11 @@
 package com.example.smiletrack.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
+@Getter
 @Entity
 @Table(name = "PRODUCT_WORKFLOW")
 public class ProductWorkflow {
