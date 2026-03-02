@@ -16,24 +16,19 @@ export default function AddCase() {
 
     const [selectedDoctor, setSelectedDoctor] = useState(null);
     const [openDoctors, setOpenDoctors] = useState(false);
-
-    // // DB에서 불러올 process 목록 (임시 더미)
-    // const availableProcesses = [
-    //     {id: 4, name: "Glazing"},
-    //     {id: 5, name: "Polish"},
-    //     {id: 6, name: "Sintering"},
-    //     {id: 7, name: "QC Check"},
-    // ];
-    //
-    // //DB에서 불러올 doctor 목록 (더미)
-    // const doctors = [
-    //     { id: 1, name: 'Dr. Sarah Miller', clinic: 'Riverside Dental Center' },
-    //     { id: 2, name: 'Dr. James Wilson', clinic: 'City Orthodontics' },
-    // ];
-
-
     const [doctors, setDoctors] = useState([]);
+
     const [availableProcesses, setAvailableProcesses] = useState([]);
+
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [openCategories, setOpenCategories] = useState(false);
+    const [categories, setCategories] = useState([]);
+
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [openProducts, setOpenProducts] = useState(false);
+    const [products, setProducts] = useState([]);
+    const filteredProducts = selectedCategory ? products.filter(p => p.category === selectedCategory.name) : products;
+
 
     useEffect(() => {
         axios.get("/api/doctors").then(res => {
@@ -42,6 +37,18 @@ export default function AddCase() {
 
         axios.get("/api/processes").then(res => {
             setAvailableProcesses(res.data);
+        });
+
+        axios.get("/api/products").then(res => {
+            setProducts(res.data);
+
+            // category만 추출하고 중복 제거
+            const categoryNames = [...new Set(res.data.map(p => p.category))];
+            const distinctCategories = [
+                { id: "ALL", name: "All" },
+                ...categoryNames.map(c => ({ id: c, name: c }))
+            ];
+            setCategories(distinctCategories);
         });
     }, []);
 
@@ -83,6 +90,7 @@ export default function AddCase() {
                 : "bg-white border-slate-200 hover:border-[#137fec] hover:bg-blue-50"
         }`;
 
+
     // 스텝 관리
     const addStepBetween = (index) => {
         const newOrder = steps[index].order + 1;
@@ -118,43 +126,71 @@ export default function AddCase() {
         caseNumber: "",
         panNumber: "",
         patientName: "",
-        category: "Fixed Prosthodontics",
         product: "Zirconia Crown",
         shade: "N/A",
         material: "Multi-layered Zirconia",
         dueDate: "",
-        priority: "Normal",
+        priority: "NORMAL",
         notes: "",
     });
 
     // 서버 전송
     const handleSubmit = async () => {
+        // ── Validation ──────────────────────────────────────────
+        if (!formData.patientName.trim()) {
+            alert("Patient name is required.");
+            return;
+        }
+        if (!selectedDoctor) {
+            alert("Please select a doctor.");
+            return;
+        }
+        if (selectedTeeth.length === 0) {
+            alert("Please select at least one tooth.");
+            return;
+        }
+        if (!selectedProduct) {
+            alert("Please select a product type.");
+            return;
+        }
+        if (!formData.dueDate) {
+            alert("Due date is required.");
+            return;
+        }
+        const validSteps = steps.filter(s => s.processId !== null);
+        if (validSteps.length === 0) {
+            alert("Please add at least one process step.");
+            return;
+        }
+
+        // ── Payload ─────────────────────────────────────────────
         const payload = {
-            caseNumber: formData.caseNumber,
-            panNumber: formData.panNumber,
-            patientName: formData.patientName,
-
-            doctorId: selectedDoctor?.id,   // 🔑 핵심
-            teeth: selectedTeeth.join(","),          // 배열 그대로 보내도 됨
-
-            category: formData.category,
-            product: formData.product,
-            shade: formData.shade,
-            material: formData.material,
-
-            dueDate: formData.dueDate,
-            priority: formData.priority,
-            notes: formData.notes,
-
-            processes: steps
-                .filter(s => s.processId !== null)
-                .map((s) => ({
-                    processId: s.processId,
-                    sequenceOrder: s.order
-                }))
+            caseNumber:  formData.caseNumber.trim(),
+            panNumber:   formData.panNumber.trim(),
+            patientName: formData.patientName.trim(),
+            doctorId:    selectedDoctor.id,
+            teeth:       selectedTeeth.join(","),
+            productId:     selectedProduct.id,
+            shade:       formData.shade,
+            material:    formData.material,
+            dueDate:     formData.dueDate,
+            priority:    formData.priority,
+            notes:       formData.notes.trim(),
+            processes:   validSteps.map((s, i) => ({
+                processId:     s.processId,
+                sequenceOrder: i + 1,   // 삭제/삽입 후 order가 꼬일 수 있어서 index로 재계산
+            })),
         };
 
-        await axios.post("/api/cases", payload);
+        // ── Request ─────────────────────────────────────────────
+        try {
+            await axios.post("/api/cases", payload);
+            alert("Case created successfully!");
+            // 필요하면 navigate("/cases") 등으로 이동
+        } catch (err) {
+            console.error(err);
+            alert(err.response?.data?.message ?? "Failed to create case. Please try again.");
+        }
     };
 
     return (
@@ -180,6 +216,9 @@ export default function AddCase() {
                             <label className="block text-sm font-medium mb-2 text-slate-700">Case Number</label>
                             <input
                                 className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
+                                name="caseNumber"
+                                value={formData.caseNumber}
+                                onChange={handleChange}
                                 placeholder="e.g. 12345"
                                 type="text"
                             />
@@ -188,6 +227,9 @@ export default function AddCase() {
                             <label className="block text-sm font-medium mb-2 text-slate-700">Pan Number</label>
                             <input
                                 className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
+                                name="panNumber"
+                                value={formData.panNumber}
+                                onChange={handleChange}
                                 placeholder="e.g. PAN-12"
                                 type="text"
                             />
@@ -198,6 +240,9 @@ export default function AddCase() {
                             </label>
                             <input
                                 className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
+                                name="patientName"
+                                value={formData.patientName}
+                                onChange={handleChange}
                                 placeholder="e.g. John Doe"
                                 type="text"
                             />
@@ -221,7 +266,7 @@ export default function AddCase() {
                                     onOpen={() => setOpenDoctors(true)}
                                     onClose={() => setOpenDoctors(false)}
                                     renderItem={(item) => (
-                                        <div className="px-3 py-2 hover:bg-slate-50 cursor-pointer">
+                                        <div className="px-3 py-2 text-sm hover:bg-slate-50 cursor-pointer">
                                             <p className="text-sm font-medium">{item.name}</p>
                                             <p className="text-xs text-slate-500">{item.clinicName}</p>
                                         </div>
@@ -348,40 +393,85 @@ export default function AddCase() {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                         <div>
                             <label className="block text-sm font-medium mb-2 text-slate-700">Category</label>
-                            <select
-                                className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none">
-                                <option>Fixed Prosthodontics</option>
-                                <option>Removable</option>
-                                <option>Implantology</option>
-                            </select>
+                            <div className="relative group">
+                                <SearchableSelect
+                                    selectedItem={selectedCategory}
+                                    items={categories}
+                                    labelKey="name"
+                                    valueKey="id"
+                                    display={true}
+                                    open={openCategories}
+                                    onSelect={(item) => {
+                                        setSelectedCategory(item.id === "ALL" ? null : item);
+                                        setSelectedProduct(null);
+                                        setOpenCategories(false);
+                                    }}
+                                    onOpen={() => setOpenCategories(true)}
+                                    onClose={() => setOpenCategories(false)}
+                                    renderItem={(item) => (
+                                        <div className="px-3 py-2 hover:bg-slate-50 cursor-pointer">
+                                            <p className="text-sm font-medium">{item.name}</p>
+                                        </div>
+                                    )}
+                                />
+                                <span className="material-symbols-outlined text-sm absolute right-3 top-1/2 -translate-y-1/2">keyboard_arrow_down</span>
+                            </div>
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-2 text-slate-700">Specific Product</label>
-                            <select
-                                className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none">
-                                <option>Zirconia Crown</option>
-                                <option>PFM Crown</option>
-                                <option>Veneer</option>
-                            </select>
+                            <div className="relative group">
+
+                                <SearchableSelect
+                                    items={filteredProducts}
+                                    labelKey="name"
+                                    valueKey="id"
+                                    display={true}
+                                    open={openProducts}
+                                    onSelect={(item) => {
+                                        setSelectedProduct(item);
+                                        const matchedCategory = categories.find(
+                                            c => c.name === item.category
+                                        );
+                                        if (matchedCategory) {
+                                            setSelectedCategory(matchedCategory);
+                                        }
+                                        setOpenProducts(false);
+                                    }}
+                                    onOpen={() => setOpenProducts(true)}
+                                    onClose={() => setOpenProducts(false)}
+                                    renderItem={(item) => (
+                                        <div className="px-3 py-2 hover:bg-slate-50 cursor-pointer">
+                                            <p className="text-sm font-medium">{item.name}</p>
+                                        </div>
+                                    )}
+                                />
+                                <span className="material-symbols-outlined text-sm absolute right-3 top-1/2 -translate-y-1/2">keyboard_arrow_down</span>
+                            </div>
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-2 text-slate-700">Shade</label>
                             <select
+                                name="shade"
+                                value={formData.shade}
+                                onChange={handleChange}
                                 className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none">
-                                <option>N/A</option>
-                                <option>A1</option>
-                                <option>A2</option>
-                                <option>A3</option>
-                                <option>B1</option>
+                                <option value="1">N/A</option>
+                                <option value="2">A1</option>
+                                <option value="3">A2</option>
+                                <option value="4">A3</option>
+                                <option value="5">B1</option>
                             </select>
                         </div>
                         <div>
                             <label className="block text-sm font-medium mb-2 text-slate-700">Material</label>
                             <select
+                                name="material"
+                                value={formData.material}
+                                onChange={handleChange}
                                 className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none">
-                                <option>Multi-layered Zirconia</option>
-                                <option>E-Max</option>
-                                <option>CoCr Alloy</option>
+                                <option value="1">Multi-layered Zirconia</option>
+                                <option value="2">E-Max</option>
+                                <option value="3">CoCr Alloy</option>
                             </select>
                         </div>
                     </div>
@@ -466,15 +556,21 @@ export default function AddCase() {
                                 <input
                                     className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
                                     type="date"
+                                    name="dueDate"
+                                    value={formData.dueDate}
+                                    onChange={handleChange}
                                 />
                             </div>
                             <div>
                                 <label className="block text-sm font-medium mb-2 text-slate-700">Priority</label>
                                 <select
-                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none">
-                                    <option>Normal</option>
-                                    <option>Rush (Next Day)</option>
-                                    <option>VIP Priority</option>
+                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
+                                    name="priority"
+                                    value={formData.priority}
+                                    onChange={handleChange}>
+                                    <option value="NORMAL">Normal</option>
+                                    <option value="RUSH">Rush (Next Day)</option>
+                                    <option value="SPS">VIP Priority</option>
                                 </select>
                             </div>
                         </div>
@@ -501,6 +597,9 @@ export default function AddCase() {
                         <textarea
                             className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
                             placeholder="Add case-specific instructions, clinical photos description, or patient-specific requests..."
+                            name="notes"
+                            value={formData.notes}
+                            onChange={handleChange}
                             rows={6}
                         />
                     </section>
@@ -515,9 +614,9 @@ export default function AddCase() {
                     <div className="flex flex-col">
                         <p className="text-xs text-slate-500 font-medium uppercase">Selection Summary</p>
                         <p className="text-sm font-semibold text-[#137fec]">
-                            Zirconia Crown
+                            {selectedProduct?.name ?? "No product selected"}
                             • {selectedTeeth.length === 0 ? "No teeth selected" : `${selectedTeeth.length} teeth selected`} •
-                            Normal Priority
+                            {formData.priority}
                         </p>
                     </div>
                     <div className="flex items-center space-x-4">
@@ -530,6 +629,7 @@ export default function AddCase() {
                         <button
                             className="px-10 py-2.5 bg-[#137fec] hover:bg-[#137fec]/90 text-white font-semibold rounded-lg shadow-lg transition-all flex items-center space-x-2"
                             type="button"
+                            onClick={handleSubmit}
                         >
                             <span className="material-symbols-outlined text-lg">save_as</span>
                             <span>Create Case Entry</span>

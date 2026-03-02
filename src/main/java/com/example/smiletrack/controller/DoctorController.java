@@ -1,9 +1,7 @@
 package com.example.smiletrack.controller;
 
 import com.example.smiletrack.dto.DoctorDto;
-import com.example.smiletrack.dto.ProcessDto;
 import com.example.smiletrack.service.DoctorService;
-import com.example.smiletrack.service.ProcessService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

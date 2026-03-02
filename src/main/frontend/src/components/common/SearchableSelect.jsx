@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 export default function SearchableSelect({
                                              display,
@@ -6,14 +6,23 @@ export default function SearchableSelect({
                                              items = [],
                                              labelKey,
                                              valueKey,
+                                             selectedItem=null,
                                              onSelect,
                                              onClose,
                                              onOpen,
                                              renderItem,
-                                             placeholder = 'Search...'
+                                             placeholder = 'Select...'
                                          }) {
     const [query, setQuery] = useState('');
     const [value, setValue] = useState(null);
+
+    useEffect(() => {
+        if (selectedItem) {
+            setValue(selectedItem);
+        } else {
+            setValue(null);
+        }
+    }, [selectedItem]);
 
     const filtered = items.filter(item =>
         String(item[labelKey])

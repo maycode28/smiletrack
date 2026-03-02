@@ -21,7 +21,7 @@ public class DoctorService {
     }
 
     public List<DoctorDto> findAll() {
-        List<Doctor> doctors = doctorRepository.findAll();
+        List<Doctor> doctors = doctorRepository.findAllWithClinic();
 
         List<DoctorDto> result = new ArrayList<>();
 
