@@ -55,15 +55,8 @@ function AddClinic() {
                 <main className="flex flex-1 justify-center py-8 px-4 md:px-10">
                     <div className="layout-content-container flex flex-col max-w-[1000px] flex-1">
 
-                        {/* Breadcrumb & Title */}
+                        {/* Title */}
                         <div className="flex flex-col gap-2 mb-8">
-                            <div className="flex items-center gap-2 text-sm text-[#4c739a] font-medium">
-                                <a className="hover:text-primary" href="#">Management</a>
-                                <span className="material-symbols-outlined text-xs">chevron_right</span>
-                                <a className="hover:text-primary" href="#">Clinics</a>
-                                <span className="material-symbols-outlined text-xs">chevron_right</span>
-                                <span className="text-primary">Add New Clinic</span>
-                            </div>
                             <h1 className="text-[#0d141b] text-3xl font-black leading-tight tracking-[-0.033em]">Register New Clinic</h1>
                             <p className="text-[#4c739a] text-base">Onboard a new dental practice to your laboratory management system.</p>
                         </div>
@@ -229,13 +222,6 @@ function AddClinic() {
                         </div>
 
                         {/* Footer */}
-                        <div className="mt-8 mb-12 flex items-center justify-between text-sm text-[#4c739a]">
-                            <p>© 2024 Dental Laboratory Management System</p>
-                            <div className="flex gap-4">
-                                <a className="hover:underline" href="#">Need help?</a>
-                                <a className="hover:underline" href="#">Quick Start Guide</a>
-                            </div>
-                        </div>
 
                     </div>
                 </main>

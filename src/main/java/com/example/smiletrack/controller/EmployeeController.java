@@ -39,7 +39,7 @@ public class EmployeeController {
             return ResponseEntity.badRequest().body(Map.of("resultCode", "F-4", "msg", "비밀번호 틀림"));
 
         rq.login(employee);
-        return ResponseEntity.ok(Map.of("resultCode", "S-1", "msg", employee.getEmployeeName() + "님 환영합니다"));
+        return ResponseEntity.ok(Map.of("resultCode", "S-1", "msg", "Welcome, " + employee.getEmployeeName()));
     }
 
     @PostMapping("/doLogout")

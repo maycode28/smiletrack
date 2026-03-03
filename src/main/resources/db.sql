@@ -114,6 +114,8 @@ CREATE TABLE EMPLOYEE
 (
     employee_id         INT AUTO_INCREMENT PRIMARY KEY,
     employee_name       VARCHAR(100) NOT NULL,
+    login_id            VARCHAR(100) NOT NULL,
+    login_pw            VARCHAR(100) NOT NULL,
     department_id       INT,
     role                TEXT,
     default_location_id INT,
@@ -192,7 +194,7 @@ CREATE TABLE `CASE`
     due_date            DATE        NOT NULL,
     pan_number          VARCHAR(50),
     tooth_numbers       VARCHAR(200),
-    arch_type           ENUM('upper','lower','both','n/a') DEFAULT 'n/a',
+    arch_type           ENUM('UPPER','LOWER','BOTH','NA') DEFAULT 'NA',
     shade               VARCHAR(50) DEFAULT 'N/A',
     material            VARCHAR(200),
     priority            ENUM('normal','rush','SPS') DEFAULT 'normal',
@@ -333,6 +335,18 @@ CREATE TABLE NOTIFICATION
     FOREIGN KEY (case_id) REFERENCES `CASE` (case_id)
 );
 
+
+
+select *
+from `case`
+select *
+from case_process
+select *
+from case_note
+select *
+from employee
+
+
 -- ============================================================
 -- TEST DATA
 -- ============================================================
@@ -340,17 +354,10 @@ CREATE TABLE NOTIFICATION
 -- ============================================================
 -- 1. LOCATION
 -- ============================================================
-INSERT INTO LOCATION (location_name, location_code, location_type, parent_location_id)
-VALUES ('Lab Floor A', 'AREA-A', 'area', NULL),
-       ('Reception Room', 'ROOM-RCP', 'room', 1),
-       ('Wax & Model Room', 'ROOM-WAX', 'room', 1),
-       ('Metal/Casting Room', 'ROOM-CAST', 'room', 1),
-       ('Porcelain Room', 'ROOM-PRC', 'room', 1),
-       ('Finishing Room', 'ROOM-FIN', 'room', 1),
-       ('QC Room', 'ROOM-QC', 'room', 1),
-       ('Shipping Room', 'ROOM-SHIP', 'room', 1),
-       ('Shelf A-01', 'SHELF-A01', 'shelf', 2),
-       ('Shelf WAX-01', 'SHELF-W01', 'shelf', 3);
+    INSERT
+INTO LOCATION (location_name, location_code, location_type, parent_location_id)
+VALUES
+    ('Lab Floor A', 'AREA-A', 'area', NULL), ('Reception Room', 'ROOM-RCP', 'room', 1), ('Wax & Model Room', 'ROOM-WAX', 'room', 1), ('Metal/Casting Room', 'ROOM-CAST', 'room', 1), ('Porcelain Room', 'ROOM-PRC', 'room', 1), ('Finishing Room', 'ROOM-FIN', 'room', 1), ('QC Room', 'ROOM-QC', 'room', 1), ('Shipping Room', 'ROOM-SHIP', 'room', 1), ('Shelf A-01', 'SHELF-A01', 'shelf', 2), ('Shelf WAX-01', 'SHELF-W01', 'shelf', 3);
 
 -- ============================================================
 -- 2. PRODUCT_TYPE
@@ -414,27 +421,30 @@ VALUES ('Intake & Model', 2, NULL, TRUE),  -- dept 1
 -- ============================================================
 -- 6. EMPLOYEE
 -- ============================================================
-INSERT INTO EMPLOYEE (employee_name, department_id, role, default_location_id, shift_start, shift_end, is_manager,
-                      is_active, is_on_duty)
+INSERT INTO EMPLOYEE (employee_name, login_id, login_pw, department_id, role, default_location_id, shift_start,
+                      shift_end, is_manager, is_active, is_on_duty)
 VALUES
 -- Dept 1: Intake
-('Alice Kim', 1, 'Intake Technician', 2, '08:00:00', '17:00:00', TRUE, TRUE, TRUE),      -- emp 1
-('Bob Lee', 1, 'Intake Technician', 2, '08:00:00', '17:00:00', FALSE, TRUE, TRUE),       -- emp 2
+('Alice Kim', 'alice.kim', 'alice.kim', 1, 'Intake Technician', 2, '08:00:00', '17:00:00', TRUE, TRUE, TRUE),  -- emp 1
+('Bob Lee', 'bob.lee', 'bob.lee', 1, 'Intake Technician', 2, '08:00:00', '17:00:00', FALSE, TRUE, TRUE),       -- emp 2
 -- Dept 2: Wax
-('Carol Park', 2, 'Senior Wax Tech', 3, '08:00:00', '17:00:00', TRUE, TRUE, TRUE),       -- emp 3
-('David Yoon', 2, 'Wax Technician', 3, '08:00:00', '17:00:00', FALSE, TRUE, TRUE),       -- emp 4
+('Carol Park', 'carol.park', 'carol.park', 2, 'Senior Wax Tech', 3, '08:00:00', '17:00:00', TRUE, TRUE, TRUE), -- emp 3
+('David Yoon', 'david.yoon', 'david.yoon', 2, 'Wax Technician', 3, '08:00:00', '17:00:00', FALSE, TRUE, TRUE), -- emp 4
 -- Dept 3: Casting
-('Ethan Cho', 3, 'Casting Technician', 4, '08:00:00', '17:00:00', TRUE, TRUE, TRUE),     -- emp 5
+('Ethan Cho', 'ethan.cho', 'ethan.cho', 3, 'Casting Technician', 4, '08:00:00', '17:00:00', TRUE, TRUE, TRUE), -- emp 5
 -- Dept 4: Porcelain
-('Fiona Jung', 4, 'Senior Porcelain Tech', 5, '08:00:00', '17:00:00', TRUE, TRUE, TRUE), -- emp 6
-('Grace Han', 4, 'Porcelain Technician', 5, '08:00:00', '17:00:00', FALSE, TRUE, TRUE),  -- emp 7
+('Fiona Jung', 'fiona.jung', 'fiona.jung', 4, 'Senior Porcelain Tech', 5, '08:00:00', '17:00:00', TRUE, TRUE,
+ TRUE),                                                                                                        -- emp 6
+('Grace Han', 'grace.han', 'grace.han', 4, 'Porcelain Technician', 5, '08:00:00', '17:00:00', FALSE, TRUE,
+ TRUE),                                                                                                        -- emp 7
 -- Dept 5: Finishing & QC
-('Henry Oh', 5, 'Finishing Technician', 6, '08:00:00', '17:00:00', TRUE, TRUE, TRUE),    -- emp 8
-('Irene Choi', 5, 'QC Inspector', 7, '08:00:00', '17:00:00', FALSE, TRUE, TRUE),         -- emp 9
+('Henry Oh', 'henry.oh', 'henry.oh', 5, 'Finishing Technician', 6, '08:00:00', '17:00:00', TRUE, TRUE, TRUE),  -- emp 8
+('Irene Choi', 'irene.choi', 'irene.choi', 5, 'QC Inspector', 7, '08:00:00', '17:00:00', FALSE, TRUE, TRUE),   -- emp 9
 -- Dept 6: Shipping
-('James Kang', 6, 'Shipping Coordinator', 8, '09:00:00', '18:00:00', TRUE, TRUE, TRUE),  -- emp 10
+('James Kang', 'james.kang', 'james.kang', 6, 'Shipping Coordinator', 8, '09:00:00', '18:00:00', TRUE, TRUE,
+ TRUE),                                                                                                        -- emp 10
 -- Account Manager (no specific dept)
-('Susan Bae', NULL, 'Account Manager', 2, '09:00:00', '18:00:00', FALSE, TRUE, TRUE);
+('Susan Bae', 'susan.bae', 'susan.bae', NULL, 'Account Manager', 2, '09:00:00', '18:00:00', FALSE, TRUE, TRUE);
 -- emp 11
 
 -- Update department managers
@@ -517,13 +527,13 @@ VALUES ('Dr. Michael Chen', 1, 'mchen@brightsmile.com', '310-555-1011',
 -- ============================================================
 INSERT INTO `CASE` (case_number, patient_name, doctor_id, product_type_id, due_date, pan_number, tooth_numbers,
                     arch_type, shade, material, priority, current_status, current_holder_id, current_location_id)
-VALUES ('250001', 'John Doe', 1, 1, '2025-07-20', '042W', '#14', 'upper', 'A2', 'Palladium-Silver', 'normal',
+VALUES ('250001', 'John Doe', 1, 1, '2025-07-20', '042W', '#14', 'UPPER', 'A2', 'Palladium-Silver', 'normal',
         'in_progress', 3, 3),
-       ('250002', 'Jane Smith', 2, 1, '2025-07-18', '117B', '#30', 'lower', 'B3', 'Palladium-Silver', 'rush',
+       ('250002', 'Jane Smith', 2, 1, '2025-07-18', '117B', '#30', 'LOWER', 'B3', 'Palladium-Silver', 'rush',
         'in_progress', 5, 4),
-       ('250003', 'Tom Brown', 3, 1, '2025-07-25', '203V', '#3,#4', 'upper', 'A3', 'High Noble Gold', 'normal',
+       ('250003', 'Tom Brown', 3, 1, '2025-07-25', '203V', '#3,#4', 'UPPER', 'A3', 'High Noble Gold', 'normal',
         'floating', NULL, 2),
-       ('250004', 'Lisa Wilson', 4, 1, '2025-07-15', '089G', '#19', 'lower', 'A1', 'Palladium-Silver', 'SPS',
+       ('250004', 'Lisa Wilson', 4, 1, '2025-07-15', '089G', '#19', 'LOWER', 'A1', 'Palladium-Silver', 'SPS',
         'completed', 10, 8);
 
 -- ============================================================
