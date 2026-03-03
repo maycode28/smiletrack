@@ -10,7 +10,7 @@ export default function Header() {
 
     // 네비 링크 목록
     const navLinks = [
-        {label: "Dashboard", path: "/"},
+        {label: "Dashboard", path: "/dashboard"},
         {label: "Cases", path: "/cases/list"},
         {label: "Assignment", path: "/assignment"},
         {label: "Staff", path: "/staff"},
@@ -31,6 +31,11 @@ export default function Header() {
         if (e.key === "Enter" && query.trim()) {
             navigate(`/cases/list?q=${encodeURIComponent(query)}`);
         }
+    };
+
+    const handleLogout = async () => {
+        await fetch("/api/employee/doLogout", { method: "POST" });
+        window.location.href = "/";
     };
 
     return (
@@ -117,6 +122,11 @@ export default function Header() {
                                     <span className="material-symbols-outlined text-[18px]">person</span>
                                     <span>My Profile</span>
                                 </a>
+                                <hr/>
+                                <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-700 hover:bg-slate-50 text-left">
+                                    <span className="material-symbols-outlined text-[18px]">logout</span>
+                                    <span>Sign Out</span>
+                                </button>
                             </div>
                         )}
                     </div>
