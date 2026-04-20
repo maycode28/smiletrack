@@ -28,7 +28,6 @@ public class CaseService {
     private final ProductRepository productRepository;
     private final ProcessRepository processRepository;
     private final LabCaseProcessRepository labCaseProcessRepository;
-    private final EmployeeRepository employeeRepository;
     private final LabCaseNoteRepository labCaseNoteRepository;
 
     private static final Set<Integer> UPPER_TEETH = Set.of(
@@ -128,6 +127,11 @@ public class CaseService {
     }
 
     public void createCase(CaseCreateRequest req, Rq rq) {
+        Employee loggedInEmployee = rq.getLoggedInEmployee();
+
+        if (loggedInEmployee == null) {
+            throw new IllegalStateException("로그인한 사용자 정보가 없습니다.");
+        }
 
         // 참조 엔티티 조회
         Doctor doctor = doctorRepository.findById(req.getDoctorId())
@@ -135,8 +139,6 @@ public class CaseService {
 
         ProductType productType = productRepository.findById(req.getProductId())
                 .orElseThrow();
-
-        Employee employee = employeeRepository.findById(1).orElseThrow();
 
         // CASE 저장 (부모)
         LabCase labCase = LabCase.builder()
@@ -151,8 +153,8 @@ public class CaseService {
                 .productType(productType)
                 .toothNumbers(req.getTeeth())
                 .archType(determineArchType(req.getTeeth()))
-                .currentHolder(rq.getLoggedInEmployee())
-                .currentLocation(rq.getLoggedInEmployee().getDefaultLocation())
+                .currentHolder(loggedInEmployee)
+                .currentLocation(loggedInEmployee.getDefaultLocation())
                 .build();
 
         labCaseRepository.save(labCase);
@@ -190,7 +192,7 @@ public class CaseService {
 
         LabCaseNote lcn = LabCaseNote.builder()
                 .labCase(labCase)
-                .employee(employee)
+                .employee(loggedInEmployee)
                 .noteContent(req.getNotes())
                 .build();
         labCaseNoteRepository.save(lcn);
