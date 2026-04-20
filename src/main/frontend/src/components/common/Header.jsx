@@ -13,6 +13,9 @@ export default function Header() {
     const navLinks = [
         {label: "Dashboard", path: "/dashboard"},
         {label: "Cases", path: "/cases/list"},
+        {label: "Assignment", path: "/assignment", disabled: true},
+        {label: "Staff", path: "/staff", disabled: true},
+        {label: "Doctors", path: "/doctors", disabled: true},
         {label: "Add Clinic", path: "/doctors/addClinic"},
         {label: "Add Case", path: "/cases/addCase"},
     ];
@@ -86,7 +89,21 @@ export default function Header() {
                             const isActive = link.path === "/"
                                 ? location.pathname === "/"
                                 : location.pathname.startsWith(link.path);
-                            return (<Link
+
+                            if (link.disabled) {
+                                return (
+                                    <span
+                                        key={link.path}
+                                        title="준비 중인 메뉴"
+                                        className="text-sm h-16 flex items-center font-medium text-slate-400 cursor-default"
+                                    >
+                                        {link.label}
+                                    </span>
+                                );
+                            }
+
+                            return (
+                                <Link
                                     key={link.path}
                                     to={link.path}
                                     className={`text-sm h-16 flex items-center transition-colors
