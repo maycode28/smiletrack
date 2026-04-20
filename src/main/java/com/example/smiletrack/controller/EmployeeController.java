@@ -3,8 +3,6 @@ package com.example.smiletrack.controller;
 import com.example.smiletrack.entity.Employee;
 import com.example.smiletrack.service.EmployeeService;
 import com.example.smiletrack.util.Rq;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,17 +11,16 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/employee")
 public class EmployeeController {
+    private final Rq rq;
+    private final EmployeeService employeeService;
 
-    @Autowired
-    private Rq rq;
-
-    @Autowired
-    private EmployeeService employeeService;
+    public EmployeeController(Rq rq, EmployeeService employeeService) {
+        this.rq = rq;
+        this.employeeService = employeeService;
+    }
 
     @PostMapping("/doLogin")
-    public ResponseEntity<?> doLogin(HttpServletRequest req, @RequestBody Map<String, String> body) {
-        Rq rq = (Rq) req.getAttribute("rq");
-
+    public ResponseEntity<?> doLogin(@RequestBody Map<String, String> body) {
         String loginId = body.get("loginId");
         String loginPw = body.get("loginPw");
 
@@ -43,16 +40,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/doLogout")
-    public ResponseEntity<?> doLogout(HttpServletRequest req) {
-        Rq rq = (Rq) req.getAttribute("rq");
+    public ResponseEntity<?> doLogout() {
         rq.logout();
         return ResponseEntity.ok(Map.of("resultCode", "S-1", "msg", "로그아웃 성공"));
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getMe(HttpServletRequest req) {
-        Rq rq = (Rq) req.getAttribute("rq");
-
+    public ResponseEntity<?> getMe() {
         if (!rq.isLoggedIn())
             return ResponseEntity.status(401).body(Map.of("resultCode", "F-1", "msg", "로그인 필요"));
 
