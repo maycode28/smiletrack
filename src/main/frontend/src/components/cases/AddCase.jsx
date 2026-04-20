@@ -4,6 +4,9 @@ import axios from "axios";
 import SearchableSelect from "../common/SearchableSelect";
 
 export default function AddCase() {
+    const minDueDateTime = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .slice(0, 16);
     const [selectedTeeth, setSelectedTeeth] = useState([]);
 
     const [steps, setSteps] = useState([]);
@@ -151,6 +154,10 @@ export default function AddCase() {
         }
         if (!formData.dueDate) {
             alert("Due date is required.");
+            return;
+        }
+        if (formData.dueDate < minDueDateTime) {
+            alert("Due date cannot be earlier than now.");
             return;
         }
         const validSteps = steps.filter(s => s.processId !== null);
@@ -565,9 +572,10 @@ export default function AddCase() {
                                     <label className="block text-sm font-medium mb-2 text-slate-700">Due Date</label>
                                     <input
                                         className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
-                                        type="date"
+                                        type="datetime-local"
                                         name="dueDate"
                                         value={formData.dueDate}
+                                        min={minDueDateTime}
                                         onChange={handleChange}
                                     />
                                 </div>

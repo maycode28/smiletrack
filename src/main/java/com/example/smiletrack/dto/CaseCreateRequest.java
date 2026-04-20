@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -23,7 +23,7 @@ public class CaseCreateRequest {
     private String shade;
     private String material;
 
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
     private String priority;
     private String notes;
 

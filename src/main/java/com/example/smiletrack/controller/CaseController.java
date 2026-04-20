@@ -6,6 +6,8 @@ import com.example.smiletrack.util.Rq;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 @RestController
@@ -27,6 +29,18 @@ public class CaseController {
         if (!rq.isLoggedIn()) {
             return ResponseEntity.status(401)
                     .body(Map.of("resultCode", "F-1", "msg", "로그인 후 케이스를 등록할 수 있습니다."));
+        }
+
+        if (request.getDueDate() == null) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("resultCode", "F-2", "msg", "납기일을 입력해 주세요."));
+        }
+
+        LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+
+        if (request.getDueDate().isBefore(now)) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("resultCode", "F-3", "msg", "납기일은 현재 시각 이후로 입력해 주세요."));
         }
 
         caseService.createCase(request, rq);

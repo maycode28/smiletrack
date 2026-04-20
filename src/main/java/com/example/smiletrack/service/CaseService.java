@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -140,6 +141,14 @@ public class CaseService {
         ProductType productType = productRepository.findById(req.getProductId())
                 .orElseThrow();
 
+        LabCase.Priority priority;
+
+        try {
+            priority = LabCase.Priority.valueOf(req.getPriority().toUpperCase(Locale.ROOT));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("유효하지 않은 우선순위입니다.");
+        }
+
         // CASE 저장 (부모)
         LabCase labCase = LabCase.builder()
                 .caseNumber(req.getCaseNumber())
@@ -148,7 +157,7 @@ public class CaseService {
                 .dueDate(req.getDueDate())
                 .shade(req.getShade())
                 .material(req.getMaterial())
-                .priority(LabCase.Priority.valueOf(req.getPriority()))
+                .priority(priority)
                 .doctor(doctor)
                 .productType(productType)
                 .toothNumbers(req.getTeeth())

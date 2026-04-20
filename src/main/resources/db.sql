@@ -191,7 +191,7 @@ CREATE TABLE `CASE`
     patient_name        VARCHAR(50) NOT NULL,
     doctor_id           INT         NOT NULL,
     product_type_id     INT         NOT NULL,
-    due_date            DATE        NOT NULL,
+    due_date            DATETIME    NOT NULL,
     pan_number          VARCHAR(50),
     tooth_numbers       VARCHAR(200),
     arch_type           ENUM('UPPER','LOWER','BOTH','NA') DEFAULT 'NA',
@@ -527,13 +527,13 @@ VALUES ('Dr. Michael Chen', 1, 'mchen@brightsmile.com', '310-555-1011',
 -- ============================================================
 INSERT INTO `CASE` (case_number, patient_name, doctor_id, product_type_id, due_date, pan_number, tooth_numbers,
                     arch_type, shade, material, priority, current_status, current_holder_id, current_location_id)
-VALUES ('250001', 'John Doe', 1, 1, '2025-07-20', '042W', '#14', 'UPPER', 'A2', 'Palladium-Silver', 'normal',
+VALUES ('250001', 'John Doe', 1, 1, '2025-07-20 17:00:00', '042W', '#14', 'UPPER', 'A2', 'Palladium-Silver', 'normal',
         'in_progress', 3, 3),
-       ('250002', 'Jane Smith', 2, 1, '2025-07-18', '117B', '#30', 'LOWER', 'B3', 'Palladium-Silver', 'rush',
+       ('250002', 'Jane Smith', 2, 1, '2025-07-18 10:30:00', '117B', '#30', 'LOWER', 'B3', 'Palladium-Silver', 'rush',
         'in_progress', 5, 4),
-       ('250003', 'Tom Brown', 3, 1, '2025-07-25', '203V', '#3,#4', 'UPPER', 'A3', 'High Noble Gold', 'normal',
+       ('250003', 'Tom Brown', 3, 1, '2025-07-25 15:00:00', '203V', '#3,#4', 'UPPER', 'A3', 'High Noble Gold', 'normal',
         'floating', NULL, 2),
-       ('250004', 'Lisa Wilson', 4, 1, '2025-07-15', '089G', '#19', 'LOWER', 'A1', 'Palladium-Silver', 'SPS',
+       ('250004', 'Lisa Wilson', 4, 1, '2025-07-15 09:00:00', '089G', '#19', 'LOWER', 'A1', 'Palladium-Silver', 'SPS',
         'completed', 10, 8);
 
 -- ============================================================

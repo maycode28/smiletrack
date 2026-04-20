@@ -3,7 +3,6 @@ package com.example.smiletrack.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -49,7 +48,7 @@ public class LabCase {
     private String patientName;
 
     @Column(name = "due_date", nullable = false)
-    private LocalDate dueDate;
+    private LocalDateTime dueDate;
 
     @Column(name = "pan_number", length = 50)
     private String panNumber;
