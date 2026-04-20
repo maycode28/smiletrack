@@ -63,8 +63,6 @@ export default function AddCase() {
     const lowerLeft = [48, 47, 46, 45, 44, 43, 42, 41];
     const lowerRight = [31, 32, 33, 34, 35, 36, 37, 38];
 
-    const upper = [...upperLeft, ...upperRight];
-    const lower = [...lowerLeft, ...lowerRight];
     const toggleTooth = (num) => {
         setSelectedTeeth((prev) =>
             prev.includes(num) ? prev.filter((t) => t !== num) : [...prev, num]
