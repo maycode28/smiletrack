@@ -81,7 +81,7 @@ const timelineColor = {
 
 export default function CaseList() {
     const [currentPage, setCurrentPage] = useState(1);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     const query = searchParams.get("q") || "";
     useEffect(() => {
@@ -98,6 +98,8 @@ export default function CaseList() {
             c.id.includes(keyword)
         );
     });
+
+    const totalResults = filteredCases.length;
 
     return (
         <div className="min-h-screen font-sans text-slate-900">
@@ -212,14 +214,14 @@ export default function CaseList() {
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 text-right">
-                                        <a
-                                            href="#"
+                                        <button
+                                            type="button"
                                             className="inline-flex items-center justify-center w-8 h-8 border border-slate-200 rounded-lg text-slate-400 bg-white hover:bg-slate-50 hover:text-blue-600 transition-all group-hover:border-blue-200"
                                         >
                                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                 <polyline points="9 18 15 12 9 6" />
                                             </svg>
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
@@ -230,9 +232,9 @@ export default function CaseList() {
                     {/* Pagination */}
                     <div className="px-6 py-4 bg-slate-50 flex items-center justify-between border-t border-slate-200">
                         <div className="text-sm text-slate-500">
-                            Showing <span className="font-medium text-slate-900">1</span> to{" "}
-                            <span className="font-medium text-slate-900">4</span> of{" "}
-                            <span className="font-medium text-slate-900">24</span> results
+                            Showing <span className="font-medium text-slate-900">{totalResults === 0 ? 0 : 1}</span> to{" "}
+                            <span className="font-medium text-slate-900">{totalResults}</span> of{" "}
+                            <span className="font-medium text-slate-900">{totalResults}</span> results
                         </div>
                         <div className="flex gap-2">
                             <button

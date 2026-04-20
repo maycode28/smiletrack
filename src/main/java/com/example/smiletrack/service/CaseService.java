@@ -136,10 +136,10 @@ public class CaseService {
 
         // 참조 엔티티 조회
         Doctor doctor = doctorRepository.findById(req.getDoctorId())
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 의사입니다."));
 
         ProductType productType = productRepository.findById(req.getProductId())
-                .orElseThrow();
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 제품입니다."));
 
         LabCase.Priority priority;
 
@@ -179,9 +179,12 @@ public class CaseService {
         }
 
         for (ProcessStep step : req.getProcesses()) {
+            if (step.getProcessId() == null) {
+                throw new IllegalArgumentException("공정 정보가 올바르지 않습니다.");
+            }
 
             Process process = processRepository.findById(step.getProcessId())
-                    .orElseThrow();
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 공정입니다."));
 
             LocalDateTime start = cursor;
             LocalDateTime end = calculateEndTime(start, process.getDurationHours());
@@ -202,7 +205,7 @@ public class CaseService {
         LabCaseNote lcn = LabCaseNote.builder()
                 .labCase(labCase)
                 .employee(loggedInEmployee)
-                .noteContent(req.getNotes())
+                .noteContent(req.getNotes() == null ? "" : req.getNotes())
                 .build();
         labCaseNoteRepository.save(lcn);
 

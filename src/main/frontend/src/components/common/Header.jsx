@@ -75,6 +75,8 @@ export default function Header() {
         window.location.href = "/";
     };
 
+    const profileInitial = (me?.name || "U").trim().charAt(0).toUpperCase();
+
     return (
         <header className="bg-white border-b border-[#e2e8f0] sticky top-0 z-50">
             <div className="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between gap-12">
@@ -147,12 +149,8 @@ export default function Header() {
                     {/* 프로필 + 드롭다운 */}
                     <div className="relative cursor-pointer" ref={dropdownRef} onClick={() => setOpen(!open)}>
                         <div
-                            className="w-9 h-9 rounded-full border border-[#e2e8f0] bg-slate-100 p-0.5 overflow-visible">
-                            <img
-                                alt="User Profile"
-                                className="w-full h-full rounded-full object-cover"
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdiYEp4-un4iSw59EhFf-qO17jYJYQW8AlkkWQitKaSvB9jl8-6eepL1A06wRDaSu2D7G9vsp3Nuu5mYbpk_Nt5B5lePuet4xl1KqcaEcD1dgCsrhSUF58psj1S1xzaYpOKOMjVK07m2FlEO9sdvdNZcME1KIWytNglS98EqQ4KszEsrmKOngrWXGDESt1haxKOe0X8uuFRs5_8vzM-BRpqzhdAKmc5jPm4XXABemZrloLTRi2VKSMsVnYGtcquHg8EyA_JtfzYep7"
-                            />
+                            className="w-9 h-9 rounded-full border border-[#e2e8f0] bg-slate-100 overflow-visible flex items-center justify-center text-sm font-bold text-slate-700">
+                            {profileInitial}
                             <span
                                 className="absolute top-0 right-0 w-3 h-3 bg-[#dc2626] border-2 border-white rounded-full"></span>
                         </div>
