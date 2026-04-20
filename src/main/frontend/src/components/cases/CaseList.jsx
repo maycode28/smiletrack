@@ -117,7 +117,7 @@ export default function CaseList() {
                         </div>
                         <Link
                             to="/cases/addCase"
-                            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-sm self-start md:self-auto"
+                            className="flex items-center gap-2 px-4 py-2 bg-[#1A485C] text-white font-semibold rounded-lg hover:bg-[#153a49] transition-all shadow-sm self-start md:self-auto"
                         >
                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                 <path d="M12 5v14M5 12h14" />
@@ -142,7 +142,7 @@ export default function CaseList() {
                             { label: "Due", value: "This Week" },
                         ].map(({ label, value }) => (
                             <button key={label} className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 rounded-lg text-sm font-medium text-slate-700 transition-colors">
-                                {label}: <span className="text-blue-600 font-semibold">{value}</span>
+                                {label}: <span className="text-[#1A485C] font-semibold">{value}</span>
                                 <svg className="w-4 h-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                     <polyline points="6 9 12 15 18 9" />
                                 </svg>
@@ -150,7 +150,7 @@ export default function CaseList() {
                         ))}
                     </div>
                     <div className="ml-auto">
-                        <button className="text-slate-400 hover:text-blue-600 text-sm font-medium underline underline-offset-4 transition-colors">
+                        <button className="text-slate-400 hover:text-[#1A485C] text-sm font-medium underline underline-offset-4 transition-colors">
                             Clear All
                         </button>
                     </div>
@@ -201,7 +201,7 @@ export default function CaseList() {
                                                 {Array.from({ length: 5 }).map((_, i) => (
                                                     <div
                                                         key={i}
-                                                        className={`flex-1 rounded-full ${i < c.progressSteps ? "bg-blue-600" : "bg-slate-200"}`}
+                                                        className={`flex-1 rounded-full ${i < c.progressSteps ? "bg-[#1A485C]" : "bg-slate-200"}`}
                                                     />
                                                 ))}
                                             </div>
@@ -216,7 +216,7 @@ export default function CaseList() {
                                     <td className="px-6 py-4 text-right">
                                         <button
                                             type="button"
-                                            className="inline-flex items-center justify-center w-8 h-8 border border-slate-200 rounded-lg text-slate-400 bg-white hover:bg-slate-50 hover:text-blue-600 transition-all group-hover:border-blue-200"
+                                            className="inline-flex items-center justify-center w-8 h-8 border border-slate-200 rounded-lg text-slate-400 bg-white hover:bg-slate-50 hover:text-[#1A485C] transition-all group-hover:border-[#1A485C]/30"
                                         >
                                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                                 <polyline points="9 18 15 12 9 6" />
@@ -249,7 +249,7 @@ export default function CaseList() {
                                     onClick={() => setCurrentPage(page)}
                                     className={`px-3 py-1 border rounded text-sm font-medium transition-colors ${
                                         currentPage === page
-                                            ? "bg-blue-600 text-white border-blue-600"
+                                            ? "bg-[#1A485C] text-white border-[#1A485C]"
                                             : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
                                     }`}
                                 >

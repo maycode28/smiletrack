@@ -16,8 +16,6 @@ export default function Header() {
         {label: "Assignment", path: "/assignment", disabled: true},
         {label: "Staff", path: "/staff", disabled: true},
         {label: "Doctors", path: "/doctors", disabled: true},
-        {label: "Add Clinic", path: "/doctors/addClinic"},
-        {label: "Add Case", path: "/cases/addCase"},
     ];
 
     useEffect(() => {
@@ -110,7 +108,7 @@ export default function Header() {
                                     to={link.path}
                                     className={`text-sm h-16 flex items-center transition-colors
                                         ${isActive
-                                        ? "font-bold text-main border-b-2 border-main"
+                                        ? "font-bold text-[#1A485C] border-b-2 border-[#1A485C]"
                                         : "font-medium text-slate-500 hover:text-slate-900"
                                     }`}
                                 >

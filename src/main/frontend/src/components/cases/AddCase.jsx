@@ -83,8 +83,8 @@ export default function AddCase() {
     const toothClass = (num) =>
         `flex flex-col items-center justify-center text-[10px] font-bold border cursor-pointer transition-all duration-200 ${
             selectedTeeth.includes(num)
-                ? "bg-[#137fec] text-white border-[#137fec] shadow-md scale-105 z-10"
-                : "bg-white border-slate-200 hover:border-[#137fec] hover:bg-blue-50"
+                ? "bg-[#1A485C] text-white border-[#1A485C] shadow-md scale-105 z-10"
+                : "bg-white border-slate-200 hover:border-[#1A485C] hover:bg-[#1A485C]/5"
         }`;
 
 
@@ -209,14 +209,14 @@ export default function AddCase() {
                     {/* Case Identification */}
                     <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                         <div className="flex items-center space-x-2 mb-6 pb-2 border-b border-slate-100">
-                            <span className="material-symbols-outlined text-[#137fec]">person_search</span>
+                            <span className="material-symbols-outlined text-[#1A485C]">person_search</span>
                             <h2 className="text-lg font-semibold">Case Identification</h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div>
                                 <label className="block text-sm font-medium mb-2 text-slate-700">Case Number</label>
                                 <input
-                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
+                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#1A485C] focus:border-[#1A485C] text-sm px-3 py-2 outline-none"
                                     name="caseNumber"
                                     value={formData.caseNumber}
                                     onChange={handleChange}
@@ -227,7 +227,7 @@ export default function AddCase() {
                             <div>
                                 <label className="block text-sm font-medium mb-2 text-slate-700">Pan Number</label>
                                 <input
-                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
+                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#1A485C] focus:border-[#1A485C] text-sm px-3 py-2 outline-none"
                                     name="panNumber"
                                     value={formData.panNumber}
                                     onChange={handleChange}
@@ -240,7 +240,7 @@ export default function AddCase() {
                                     Patient Name <span className="text-red-500">*</span>
                                 </label>
                                 <input
-                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
+                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#1A485C] focus:border-[#1A485C] text-sm px-3 py-2 outline-none"
                                     name="patientName"
                                     value={formData.patientName}
                                     onChange={handleChange}
@@ -285,7 +285,7 @@ export default function AddCase() {
                     <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                         <div className="flex items-center justify-between mb-6 pb-2 border-b border-slate-100">
                             <div className="flex items-center space-x-2">
-                                <span className="material-symbols-outlined text-[#137fec]">dentistry</span>
+                                <span className="material-symbols-outlined text-[#1A485C]">dentistry</span>
                                 <h2 className="text-lg font-semibold">Tooth Selection</h2>
                             </div>
                             <div className="flex space-x-3">
@@ -388,7 +388,7 @@ export default function AddCase() {
                     {/* Product & Workflow */}
                     <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                         <div className="flex items-center space-x-2 mb-6 pb-2 border-b border-slate-100">
-                            <span className="material-symbols-outlined text-[#137fec]">category</span>
+                            <span className="material-symbols-outlined text-[#1A485C]">category</span>
                             <h2 className="text-lg font-semibold">Product & Workflow</h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -468,7 +468,7 @@ export default function AddCase() {
                                     name="shade"
                                     value={formData.shade}
                                     onChange={handleChange}
-                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none">
+                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#1A485C] focus:border-[#1A485C] text-sm px-3 py-2 outline-none">
                                     <option value="1">N/A</option>
                                     <option value="2">A1</option>
                                     <option value="3">A2</option>
@@ -482,7 +482,7 @@ export default function AddCase() {
                                     name="material"
                                     value={formData.material}
                                     onChange={handleChange}
-                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none">
+                                    className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#1A485C] focus:border-[#1A485C] text-sm px-3 py-2 outline-none">
                                     <option value="1">Multi-layered Zirconia</option>
                                     <option value="2">E-Max</option>
                                     <option value="3">CoCr Alloy</option>
@@ -490,7 +490,7 @@ export default function AddCase() {
                             </div>
                         </div>
                         {/* Process Sequence */}
-                        <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <div className="bg-[#1A485C]/5 p-4 rounded-lg border border-[#1A485C]/10">
                             <label
                                 className="block text-sm font-semibold mb-4 text-slate-700 dark:text-slate-300 uppercase tracking-wider">Process
                                 Sequence</label>
@@ -539,7 +539,7 @@ export default function AddCase() {
                                                 onClick={() => {
                                                     addStepBetween(i)
                                                 }}
-                                                className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-[#137fec]/10 hover:border-[#137fec] text-slate-400 hover:text-[#137fec] transition-all"
+                                                className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center hover:bg-[#1A485C]/10 hover:border-[#1A485C] text-slate-400 hover:text-[#1A485C] transition-all"
                                                 type="button"
                                             >
                                                 <span className="material-icons text-sm">add</span>
@@ -550,7 +550,7 @@ export default function AddCase() {
                                 {/* 맨 끝에 추가 버튼 */}
                                 <button
                                     onClick={() => addStepAtEnd()}
-                                    className="bg-[#137fec]/10 border border-dashed border-[#137fec]/20 px-4 py-2 rounded-lg text-[#137fec] text-sm font-medium flex items-center cursor-pointer hover:bg-[#137fec]/20 transition-colors"
+                                    className="bg-[#1A485C]/10 border border-dashed border-[#1A485C]/20 px-4 py-2 rounded-lg text-[#1A485C] text-sm font-medium flex items-center cursor-pointer hover:bg-[#1A485C]/20 transition-colors"
                                     type="button">
                                     <span className="material-icons text-xs mr-2">add</span> Add Step
                                 </button>
@@ -562,14 +562,14 @@ export default function AddCase() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                             <div className="flex items-center space-x-2 mb-6 pb-2 border-b border-slate-100">
-                                <span className="material-symbols-outlined text-[#137fec]">event_available</span>
+                                <span className="material-symbols-outlined text-[#1A485C]">event_available</span>
                                 <h2 className="text-lg font-semibold">Scheduling & Priority</h2>
                             </div>
                             <div className="grid grid-cols-2 gap-4 mb-6">
                                 <div>
                                     <label className="block text-sm font-medium mb-2 text-slate-700">Due Date</label>
                                     <input
-                                        className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
+                                        className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#1A485C] focus:border-[#1A485C] text-sm px-3 py-2 outline-none"
                                         type="datetime-local"
                                         name="dueDate"
                                         value={formData.dueDate}
@@ -580,7 +580,7 @@ export default function AddCase() {
                                 <div>
                                     <label className="block text-sm font-medium mb-2 text-slate-700">Priority</label>
                                     <select
-                                        className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
+                                        className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#1A485C] focus:border-[#1A485C] text-sm px-3 py-2 outline-none"
                                         name="priority"
                                         value={formData.priority}
                                         onChange={handleChange}>
@@ -590,14 +590,14 @@ export default function AddCase() {
                                     </select>
                                 </div>
                             </div>
-                            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                            <div className="bg-[#1A485C]/5 p-4 rounded-lg border border-[#1A485C]/10">
                                 <div className="flex items-start space-x-3">
                                 <span
-                                    className="material-symbols-outlined text-blue-500 text-lg mt-0.5">verified_user</span>
+                                    className="material-symbols-outlined text-[#1A485C] text-lg mt-0.5">verified_user</span>
                                     <div>
-                                        <p className="text-xs font-bold text-blue-700 uppercase">Doctor Preferences
+                                        <p className="text-xs font-bold text-[#1A485C] uppercase">Doctor Preferences
                                             (Auto-filled)</p>
-                                        <p className="text-xs text-blue-600 mt-1 leading-relaxed">
+                                        <p className="text-xs text-[#1A485C]/80 mt-1 leading-relaxed">
                                             "Prefers light occlusal contacts. All zirconia cases to be polished, not
                                             glazed
                                             unless specified."
@@ -608,11 +608,11 @@ export default function AddCase() {
                         </section>
                         <section className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                             <div className="flex items-center space-x-2 mb-6 pb-2 border-b border-slate-100">
-                                <span className="material-symbols-outlined text-[#137fec]">rate_review</span>
+                                <span className="material-symbols-outlined text-[#1A485C]">rate_review</span>
                                 <h2 className="text-lg font-semibold">Case Notes</h2>
                             </div>
                             <textarea
-                                className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#137fec] focus:border-[#137fec] text-sm px-3 py-2 outline-none"
+                                className="w-full border border-slate-200 rounded-lg focus:ring-1 focus:ring-[#1A485C] focus:border-[#1A485C] text-sm px-3 py-2 outline-none"
                                 placeholder="Add case-specific instructions, clinical photos description, or patient-specific requests..."
                                 name="notes"
                                 value={formData.notes}
@@ -630,7 +630,7 @@ export default function AddCase() {
                     <div className="max-w-5xl mx-auto flex items-center justify-between">
                         <div className="flex flex-col">
                             <p className="text-xs text-slate-500 font-medium uppercase">Selection Summary</p>
-                            <p className="text-sm font-semibold text-[#137fec]">
+                            <p className="text-sm font-semibold text-[#1A485C]">
                                 {selectedProduct?.name ?? "No product selected"}
                                 • {selectedTeeth.length === 0 ? "No teeth selected" : `${selectedTeeth.length} teeth selected`} •
                                 {formData.priority}
@@ -644,7 +644,7 @@ export default function AddCase() {
                                 Cancel
                             </button>
                             <button
-                                className="px-10 py-2.5 bg-[#137fec] hover:bg-[#137fec]/90 text-white font-semibold rounded-lg shadow-lg transition-all flex items-center space-x-2"
+                                className="px-10 py-2.5 bg-[#1A485C] hover:bg-[#1A485C]/90 text-white font-semibold rounded-lg shadow-lg transition-all flex items-center space-x-2"
                                 type="button"
                                 onClick={handleSubmit}
                             >
