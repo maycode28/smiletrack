@@ -45,7 +45,7 @@ export default function Login() {
                 />
                 <div className="relative z-0 flex items-center justify-center w-full h-full px-12">
                     <img
-                        src="https://api.builder.io/api/v1/image/assets/TEMP/ef0a532bc946412c6a9eb353b9c9a69151ffaba7?width=1280"
+                        src="/logo-wo-bg.png"
                         alt="Smile Track Logo"
                         className="w-full max-w-xs object-contain"
                     />

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Header from "../common/Header";
 
 const cases = [
@@ -113,14 +113,15 @@ export default function CaseList() {
                             <h1 className="text-3xl font-bold text-slate-900">{query ? `Results for '${query}'` : "All Cases"}</h1>
                             <p className="text-slate-500 mt-1">{filteredCases.length} active cases found matching your criteria.</p>
                         </div>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-sm self-start md:self-auto">
-                            <a href="/cases/AddCase" className="flex">
+                        <Link
+                            to="/cases/addCase"
+                            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-all shadow-sm self-start md:self-auto"
+                        >
                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                                 <path d="M12 5v14M5 12h14" />
                             </svg>
                             New Case
-                            </a>
-                        </button>
+                        </Link>
                     </div>
                 </div>
 

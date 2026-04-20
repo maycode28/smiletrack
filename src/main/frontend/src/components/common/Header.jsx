@@ -1,9 +1,10 @@
 import {useState, useEffect, useRef} from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function Header() {
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState("");
+    const [me, setMe] = useState(null);
     const dropdownRef = useRef(null);
     const location = useLocation();  // 현재 URL 감지
     const navigate = useNavigate();
@@ -12,9 +13,8 @@ export default function Header() {
     const navLinks = [
         {label: "Dashboard", path: "/dashboard"},
         {label: "Cases", path: "/cases/list"},
-        {label: "Assignment", path: "/assignment"},
-        {label: "Staff", path: "/staff"},
-        {label: "Doctors", path: "/doctors"},
+        {label: "Add Clinic", path: "/doctors/addClinic"},
+        {label: "Add Case", path: "/cases/addCase"},
     ];
 
     useEffect(() => {
@@ -26,6 +26,40 @@ export default function Header() {
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    useEffect(() => {
+        let ignore = false;
+
+        const fetchMe = async () => {
+            try {
+                const res = await fetch("/api/employee/me");
+
+                if (!res.ok) {
+                    if (res.status === 401 && location.pathname !== "/") {
+                        navigate("/", { replace: true });
+                    }
+                    return;
+                }
+
+                const data = await res.json();
+
+                if (!ignore && data.resultCode === "S-1") {
+                    setMe({
+                        name: data.name,
+                        role: data.role || "Employee",
+                    });
+                }
+            } catch (error) {
+                console.error("Failed to load logged-in user.", error);
+            }
+        };
+
+        fetchMe();
+
+        return () => {
+            ignore = true;
+        };
+    }, [location.pathname, navigate]);
 
     const handleSearchKeyDown = (e) => {
         if (e.key === "Enter" && query.trim()) {
@@ -52,9 +86,9 @@ export default function Header() {
                             const isActive = link.path === "/"
                                 ? location.pathname === "/"
                                 : location.pathname.startsWith(link.path);
-                            return (<a
+                            return (<Link
                                     key={link.path}
-                                    href={link.path}
+                                    to={link.path}
                                     className={`text-sm h-16 flex items-center transition-colors
                                         ${isActive
                                         ? "font-bold text-main border-b-2 border-main"
@@ -62,7 +96,7 @@ export default function Header() {
                                     }`}
                                 >
                                     {link.label}
-                                </a>
+                                </Link>
                             );
                         })}
                     </nav>
@@ -88,9 +122,9 @@ export default function Header() {
                 <div className="flex items-center gap-4">
                     <div className="text-right">
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">
-                            TECHNICIAN
+                            {me?.role || "Employee"}
                         </p>
-                        <p className="text-sm font-bold text-slate-900 leading-none">Marcus V.</p>
+                        <p className="text-sm font-bold text-slate-900 leading-none">{me?.name || "Loading..."}</p>
                     </div>
 
                     {/* 프로필 + 드롭다운 */}
@@ -110,18 +144,20 @@ export default function Header() {
                         {open && (
                             <div
                                 className="absolute right-0 mt-2 w-48 bg-white border border-[#e2e8f0] rounded-md shadow-lg py-1 z-50">
-                                <a className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                                   href="#">
+                                <button
+                                   type="button"
+                                   className="w-full flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 text-left">
                                     <span className="material-symbols-outlined text-[18px]">notifications</span>
                                     <span>Notifications</span>
                                     <span
                                         className="ml-auto bg-[#dc2626] text-white text-[10px] px-1.5 rounded-full">2</span>
-                                </a>
-                                <a className="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50"
-                                   href="#">
+                                </button>
+                                <button
+                                   type="button"
+                                   className="w-full flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 text-left">
                                     <span className="material-symbols-outlined text-[18px]">person</span>
                                     <span>My Profile</span>
-                                </a>
+                                </button>
                                 <hr/>
                                 <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-700 hover:bg-slate-50 text-left">
                                     <span className="material-symbols-outlined text-[18px]">logout</span>

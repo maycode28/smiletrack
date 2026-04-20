@@ -57,7 +57,12 @@ public class EmployeeController {
             return ResponseEntity.status(401).body(Map.of("resultCode", "F-1", "msg", "로그인 필요"));
 
         Employee employee = rq.getLoggedInEmployee();
-        return ResponseEntity.ok(Map.of("resultCode", "S-1", "id", employee.getEmployeeId(), "name", employee.getEmployeeName()));
+        return ResponseEntity.ok(Map.of(
+                "resultCode", "S-1",
+                "id", employee.getEmployeeId(),
+                "name", employee.getEmployeeName(),
+                "role", employee.getRole() != null ? employee.getRole() : ""
+        ));
     }
 
 }
