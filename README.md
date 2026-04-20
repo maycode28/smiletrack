@@ -104,12 +104,27 @@ MariaDB에서 `src/main/resources/db.sql`을 실행합니다.
 
 ### 5-2. 백엔드 실행
 
-실행 전 환경변수를 설정합니다.
+실행 전 환경변수를 설정합니다.  
+루트의 `.env.example`을 참고해 `.env`를 만든 뒤 불러오면 됩니다.
 
 ```bash
-export DB_URL='jdbc:mariadb://127.0.0.1:3306/smileTrack?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul'
-export DB_USERNAME='root'
-export DB_PASSWORD='여기에_본인_MariaDB_비밀번호'
+cp .env.example .env
+```
+
+`.env` 예시:
+
+```bash
+DB_URL='jdbc:mariadb://127.0.0.1:3306/smileTrack?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul'
+DB_USERNAME='root'
+DB_PASSWORD='여기에_본인_MariaDB_비밀번호'
+```
+
+Spring Boot가 `.env`를 자동으로 읽지는 않으므로, 실행 전에 셸에 불러와야 합니다.
+
+```bash
+set -a
+source .env
+set +a
 ```
 
 프로젝트 루트에서 실행합니다.

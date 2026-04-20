@@ -42,3 +42,6 @@ src/main/frontend/build/
 
 ### macOS ###
 .DS_Store
+
+### Env ###
+.env
