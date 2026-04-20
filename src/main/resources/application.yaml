@@ -3,9 +3,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://127.0.0.1:3306/smileTrack?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
-    username: root
-    password: 1234
+    url: ${DB_URL:jdbc:mariadb://127.0.0.1:3306/smileTrack?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
   jpa:
     hibernate:
       ddl-auto: validate

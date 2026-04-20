@@ -28,7 +28,7 @@ function AddClinic() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:8080/api/clinic", {
+            const response = await fetch("/api/clinic", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
@@ -39,7 +39,7 @@ function AddClinic() {
                 // 폼 초기화
                 setFormData({
                     clinicName: "", alias: "", phone: "", email: "",
-                    address: "", shippingNotes: "", accountManager: "",
+                    address: "", shippingNotes: "", accountManagerId: "",
                 });
             }
         } catch (error) {
